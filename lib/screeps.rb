@@ -15,6 +15,8 @@ class Screeps
     branch = response['branch']
     response['modules'].each_pair do |ident, body|
       FileUtils.mkdir_p File.join('js', branch)
+      # TODO: Update if file was changed only
+      # TODO: Move to separate method and add js2coffee compilling
       File.open(File.join('js', branch, ident + '.js'), 'w') do |f|
         f << body
       end

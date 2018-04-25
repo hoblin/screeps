@@ -11,7 +11,7 @@ var structureSpawn = {
       var task = this.querry[i];
       if (task.done) {lib.log('task '+task.task+' done'); continue};
       if (task.inProgress) {lib.log('task '+task.task+' inProgress');break};
-      if (task.inProgress == undefined ) {
+      if (task.inProgress === undefined ) {
         lib.log('task '+task.task+' starts')
         task.inProgress = true;
         return i
@@ -32,8 +32,8 @@ var structureSpawn = {
     var creeps = [];
     for (var i in Game.creeps) {
       var creep = Game.creeps[i];
-      if(creep.memory.kind == undefined){ this.setCreepKind(creep)}
-      if ((filter == undefined) || (creep.memory.process == filter)) { creeps.push(creep) };
+      if(creep.memory.kind === undefined){ this.setCreepKind(creep)}
+      if ((filter === undefined) || (creep.memory.process === filter)) { creeps.push(creep) };
     };
     return creeps;
   },
@@ -45,18 +45,18 @@ var structureSpawn = {
       break
     }
     var name = 'worker' + this.getWorkers().length;
-    if (this.spawn.canCreateCreep(body, name) == OK) {this.spawn.createCreep(body, name, {process: process})};
-  }, 
+    if (this.spawn.canCreateCreep(body, name) === OK) {this.spawn.createCreep(body, name, {process: process})};
+  },
   assignTask: function (taskObj, workersNeeded) {
     var freeWorkers = this.getWorkers('free');
     for(var i = 0; i < workersNeeded; i++) {
       creep = freeWorkers[i];
-      if (creep != undefined) { creep.memory.process = taskObj.task }
+      if (creep !== undefined) { creep.memory.process = taskObj.task }
     }
-  }, 
+  },
   doTheJob: function () {
     var creeps = this.getWorkers();
-    for(i in creeps) {
+    for(var i in creeps) {
       var creep = creeps[i];
       switch(creep.memory.process){
         case 'harvest':
@@ -72,9 +72,9 @@ var structureSpawn = {
         roleHarvester.run(creep);
       }
     }
-  }, 
+  },
   run: function(querry) {
-    if(this.querry == undefined) { this.spawn.memory.querry = querry };
+    if(this.querry === undefined) { this.spawn.memory.querry = querry };
     var taskIndex = this.getTaskIndex();
     if (taskIndex) { this.spawn.memory.taskIndex = taskIndex };
     var currentTask = this.querry[this.spawn.memory.taskIndex];
@@ -87,12 +87,13 @@ var structureSpawn = {
       } else {
         this.spawnCreep('worker', currentTask.task);
       };
-    } else if ((!currentTask.customDone) && (workersNeeded == 0)) { currentTask.done = true };
+    } else if ((!currentTask.customDone) && (workersNeeded === 0)) { currentTask.done = true };
     // Custome done processing
     if (currentTask.customDone) {
       switch(currentTask.task){
         case 'upgradeController':
-        if (this.spawn.room.controller.level == 2) { currentTask.done = true };
+        if (this.spawn.room.controller.level === 2) { currentTask.done = true };
+        break;
       }
     };
 
