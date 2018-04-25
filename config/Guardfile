@@ -1,4 +1,4 @@
-directories %w[config coffee].select { |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
+directories %w[config coffee js].select { |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
 
 require './lib/screeps.rb'
 
@@ -14,7 +14,7 @@ yield_options = {
 }
 
 guard :yield, yield_options do
-  watch(/^(.*)\.coffee$/)
+  watch(%r{(.*/[^.][^/]+\.js|coffee)})
 end
 
 guard :bundler do

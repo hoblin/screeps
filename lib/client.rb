@@ -19,7 +19,7 @@ class Client
     JSON.parse self.class.get(API_ENDPOINT, query: { _token: token }).body
   end
 
-  def upload
-    # TODO: Implement upload
+  def upload(data)
+    self.class.post(API_ENDPOINT, body: data.to_json, headers: { 'Content-Type' => 'application/json', 'X-Token' => token })
   end
 end
