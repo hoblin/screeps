@@ -5,10 +5,17 @@ require 'awesome_print'
 require_relative 'client.rb'
 
 class Screeps
-  attr_accessor :client
+  attr_accessor :current_modification_type, :client
 
   def initialize(credentials)
     self.client = Client.new(credentials)
+  end
+
+  def sync(action, files)
+    self.current_modification_type = action
+    affected_dirs = files.map { |file_name| File.dirname(file_name) }.uniq
+    upload if affected_dirs.include?('js')
+    compile if affected_dirs.include?('coffee')
   end
 
   def download
@@ -23,6 +30,14 @@ class Screeps
 
   def upload
     ap client.upload
+  end
+
+  def compile
+    # TODO: Implement CoffeeScript sources compilation
+  end
+
+  def log(*args)
+    ap args
   end
 
   private

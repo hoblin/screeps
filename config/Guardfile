@@ -1,6 +1,6 @@
 directories %w[config coffee].select { |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
 
-require'./lib/screeps.rb'
+require './lib/screeps.rb'
 
 yield_options = {
   object: ::Screeps.new(ENV['token']),
@@ -8,9 +8,9 @@ yield_options = {
   start: proc { |obj| obj.download },
   stop: proc { |obj| obj.upload },
 
-  run_on_modifications: proc { |obj, _, _| obj.download },
-  run_on_additions: proc { |obj, _, _| obj.download },
-  run_on_removals: proc { |obj, _, _| obj.download }
+  run_on_modifications: proc { |obj, action, files| obj.sync(action, files) },
+  run_on_additions: proc { |obj, action, files| obj.sync(action, files) },
+  run_on_removals: proc { |obj, action, files| obj.sync(action, files) }
 }
 
 guard :yield, yield_options do

@@ -18,4 +18,8 @@ class Client
   def download
     JSON.parse self.class.get(API_ENDPOINT, query: { _token: token }).body
   end
+
+  def upload
+    # TODO: Implement upload
+  end
 end
