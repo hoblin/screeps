@@ -1,4 +1,4 @@
-directories %w[config src].select { |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
+directories %w[config coffee].select { |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
 
 require'./lib/screeps.rb'
 
