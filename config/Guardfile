@@ -1,0 +1,30 @@
+directories %w[config src].select { |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
+
+require'./lib/screeps.rb'
+
+yield_options = {
+  object: ::Screeps.new(ENV['token']),
+
+  start: proc { |obj| obj.download },
+  stop: proc { |obj| obj.upload },
+
+  run_on_modifications: proc { |obj, _, _| obj.download },
+  run_on_additions: proc { |obj, _, _| obj.download },
+  run_on_removals: proc { |obj, _, _| obj.download }
+}
+
+guard :yield, yield_options do
+  watch(/^(.*)\.coffee$/)
+end
+
+guard :bundler do
+  require 'guard/bundler'
+  require 'guard/bundler/verify'
+  helper = Guard::Bundler::Verify.new
+
+  files = ['Gemfile']
+  files += Dir['*.gemspec'] if files.any? { |f| helper.uses_gemspec?(f) }
+
+  # Assume files are symlinked from somewhere
+  files.each { |file| watch(helper.real_path(file)) }
+end
