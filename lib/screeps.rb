@@ -24,7 +24,6 @@ class Screeps
   end
 
   def download
-    log 'Downloading game code from server'
     response = client.download
     branch = response['branch']
     response['modules'].each_pair do |identifier, body|
@@ -32,10 +31,10 @@ class Screeps
       file_name = File.join('js', branch, identifier + '.js')
       update_local_file_if_needed(file_name, body)
     end
+    notify_success 'Game files downloaded'
   end
 
   def upload
-    log 'Uploading game code to server'
     data = {
       branch: 'default',
       modules: collect_data_to_upload
@@ -48,8 +47,18 @@ class Screeps
     # TODO: Implement CoffeeScript sources compilation
   end
 
-  def log(*args)
-    @logger.ap(*args)
+  def notify_success(message)
+    TerminalNotifier::Guard.success(message, title: self.class)
+    log(message)
+  end
+
+  def notify_error(message)
+    TerminalNotifier::Guard.failed(message, title: self.class)
+    log(message)
+  end
+
+  def log(message)
+    @logger.info message
   end
 
   private
@@ -57,9 +66,9 @@ class Screeps
   def log_response(result)
     response = JSON.parse(result.body)
     if response['ok'] == 1
-      log '  success'
+      notify_success 'Upload success'
     else
-      log "  Error: #{response['error']}"
+      notify_error "Error during upload: #{response['error']}"
     end
   end
 

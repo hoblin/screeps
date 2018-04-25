@@ -2,11 +2,13 @@ directories %w[config coffee js].select { |d| Dir.exist?(d) ? d : UI.warning("Di
 
 require './lib/screeps.rb'
 
+notification :terminal_notifier, app_name: "Screeps ::", activate: 'com.googlecode.iTerm2' if `uname` =~ /Darwin/
+
 yield_options = {
   object: ::Screeps.new(ENV['token']),
 
   start: proc { |obj| obj.download },
-  stop: proc { |obj| obj.upload },
+  # stop: proc { |obj| obj.upload },
 
   run_on_modifications: proc { |obj, action, files| obj.sync(action, files) },
   run_on_additions: proc { |obj, action, files| obj.sync(action, files) },
