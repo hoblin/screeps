@@ -25,10 +25,9 @@ class Screeps
 
   def download
     response = client.download
-    branch = response['branch']
     response['modules'].each_pair do |identifier, body|
-      FileUtils.mkdir_p File.join('js', branch)
-      file_name = File.join('js', branch, identifier + '.js')
+      FileUtils.mkdir_p File.join('js')
+      file_name = File.join('js', identifier + '.js')
       update_local_file_if_needed(file_name, body)
     end
     notify_success 'Game files downloaded'
@@ -74,7 +73,7 @@ class Screeps
 
   def collect_data_to_upload
     Dir.glob('js/**/*.js').inject({}) do |memo, file_name|
-      memo[File.basename(file_name).split('.')[0]] = File.read(file_name)
+      memo[File.basename(file_name).gsub(/\.js$/, '')] = File.read(file_name)
       memo
     end
   end
